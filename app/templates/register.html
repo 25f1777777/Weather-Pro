@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}
+Register | WeatherPro
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center align-items-center min-vh-75">
+
+    <div class="col-lg-6 col-md-8">
+
+        <div class="glass-card auth-card">
+
+            <div class="text-center mb-4">
+
+                <div class="weather-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+
+                <h2>Create Account</h2>
+<p>Join WeatherPro and save your favorite cities</p>
+            </div>
+
+            <form method="POST">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        class="form-control custom-input"
+                        placeholder="Choose a username"
+                        required
+                    >
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control custom-input"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Password
+                    </label>
+
+                    <div class="input-group">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control custom-input"
+                            placeholder="Create a password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            id="togglePassword">
+
+                            <i class="fas fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="mt-2">
+
+                        <div class="progress">
+
+                            <div
+                                id="passwordStrength"
+                                class="progress-bar"
+                                role="progressbar"
+                                style="width: 0%">
+                            </div>
+
+                        </div>
+
+                        <small
+                            id="strengthText"
+                            class="text-muted">
+
+                            Password Strength
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirm_password"
+                        class="form-control custom-input"
+                        placeholder="Confirm password"
+                        required
+                    >
+
+                    <small
+                        id="passwordMatch"
+                        class="mt-2 d-block">
+                    </small>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-success w-100">
+
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+
+                </button>
+
+            </form>
+
+            <hr>
+
+            <div class="text-center">
+
+                <p>
+
+                    Already have an account?
+
+                    <a href="{{ url_for('auth.login') }}"
+                       class="fw-bold">
+
+                        Login Here
+
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+const password =
+document.getElementById("password");
+
+const confirmPassword =
+document.getElementById("confirmPassword");
+
+const strengthBar =
+document.getElementById("passwordStrength");
+
+const strengthText =
+document.getElementById("strengthText");
+
+const passwordMatch =
+document.getElementById("passwordMatch");
+
+
+// Password Visibility
+
+document.getElementById(
+    "togglePassword"
+).addEventListener(
+    "click",
+    () => {
+
+        const type =
+            password.type === "password"
+            ? "text"
+            : "password";
+
+        password.type = type;
+
+    }
+);
+
+
+// Password Strength
+
+password.addEventListener(
+    "input",
+    () => {
+
+        const value =
+            password.value;
+
+        let score = 0;
+
+        if(value.length >= 8) score++;
+        if(/[A-Z]/.test(value)) score++;
+        if(/[0-9]/.test(value)) score++;
+        if(/[^A-Za-z0-9]/.test(value)) score++;
+
+        const width =
+            score * 25;
+
+        strengthBar.style.width =
+            width + "%";
+
+        if(score <= 1){
+
+            strengthBar.className =
+                "progress-bar bg-danger";
+
+            strengthText.innerText =
+                "Weak";
+
+        }
+
+        else if(score <= 3){
+
+            strengthBar.className =
+                "progress-bar bg-warning";
+
+            strengthText.innerText =
+                "Medium";
+
+        }
+
+        else{
+
+            strengthBar.className =
+                "progress-bar bg-success";
+
+            strengthText.innerText =
+                "Strong";
+
+        }
+
+    }
+);
+
+
+// Password Match
+
+confirmPassword.addEventListener(
+    "input",
+    () => {
+
+        if(
+            confirmPassword.value ===
+            password.value
+        ){
+
+            passwordMatch.innerHTML =
+                "<span class='text-success'>Passwords Match</span>";
+
+        }
+
+        else{
+
+            passwordMatch.innerHTML =
+                "<span class='text-danger'>Passwords Do Not Match</span>";
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

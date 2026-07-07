@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard | WeatherPro
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- HERO SECTION -->
+
+    <div class="row mb-4">
+
+        <div class="col-12">
+
+            <div class="glass-card p-4">
+
+                <h1 class="fw-bold mb-3">
+
+                    <i class="fas fa-cloud-sun"></i>
+                    Weather Dashboard
+
+                </h1>
+
+                <div class="input-group mb-3">
+
+                    <input
+                        type="text"
+                        id="cityInput"
+                        class="form-control form-control-lg"
+                        placeholder="Search city..."
+                        value="{{ selected_city|default('') }}"
+                    >
+                    
+                    <button
+                        class="btn btn-primary"
+                        id="searchBtn">
+
+                        <i class="fas fa-search"></i>
+                        Search
+
+                    </button>
+
+                </div>
+
+                <button
+                    class="btn btn-warning"
+                    id="addFavoriteBtn">
+
+                    <i class="fas fa-star"></i>
+                    Add To Favorites
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <!-- LEFT SIDEBAR -->
+
+        <div class="col-lg-3 mb-4">
+
+            <!-- FAVORITES -->
+
+            <div class="glass-card p-3 mb-4">
+
+                <h5 class="mb-3">
+
+                    <i class="fas fa-star text-warning"></i>
+                    Favorites
+
+                </h5>
+
+                <div id="favoritesContainer">
+
+                    {% if favorites %}
+
+                        {% for city in favorites %}
+
+                        <div
+                            class="favorite-city d-flex justify-content-between align-items-center mb-2">
+
+                            <span>
+                                {{ city.city_name }}
+                            </span>
+
+                            <button
+                                class="btn btn-sm btn-danger delete-favorite"
+                                data-id="{{ city.id }}">
+
+                                <i class="fas fa-trash"></i>
+
+                            </button>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p class="mb-0 favorite-empty">
+                            No favorites yet
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <!-- SEARCH HISTORY -->
+
+            <div class="glass-card p-3">
+
+                <h5 class="mb-3">
+
+                    <i class="fas fa-history"></i>
+                    Recent Searches
+
+                </h5>
+
+                <div>
+
+                    {% if recent_searches %}
+
+                        {% for search in recent_searches %}
+
+                        <div class="history-item mb-2">
+
+                            <i class="fas fa-clock me-2"></i>
+                            {{ search.city_name }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p class="text-muted mb-0">
+                            No searches yet
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- MAIN CONTENT -->
+
+        <div class="col-lg-9">
+
+            <!-- LOADING -->
+
+            <div
+                id="loadingSpinner"
+                class="text-center d-none">
+
+                <div
+                    class="spinner-border text-primary"
+                    role="status">
+
+                    <span class="visually-hidden">
+                        Loading...
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- WEATHER DATA -->
+
+            <div id="weatherContent">
+
+                <!-- CURRENT WEATHER -->
+
+                <div
+                    class="glass-card p-4 mb-4 d-none"
+                    id="currentWeatherCard">
+
+                    <div
+                        class="d-flex justify-content-between align-items-center flex-wrap">
+
+                        <div>
+
+                            <h2 id="cityName">
+
+                                City
+
+                            </h2>
+
+                            <p id="weatherDescription">
+
+                                Description
+
+                            </p>
+
+                            <h1 id="temperature">
+
+                                0°C
+
+                            </h1>
+
+                        </div>
+
+                        <div>
+
+                            <img
+                                id="weatherIcon"
+                                src=""
+                                alt="Weather Icon"
+                                width="120">
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="row text-center">
+
+                        <div class="col-md-3">
+
+                            <h6>Humidity</h6>
+
+                            <p id="humidity">--</p>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <h6>Wind</h6>
+
+                            <p id="windSpeed">--</p>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <h6>Pressure</h6>
+
+                            <p id="pressure">--</p>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <h6>Feels Like</h6>
+
+                            <p id="feelsLike">--</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- AQI -->
+
+                <div
+                    class="glass-card p-4 mb-4 d-none"
+                    id="aqiCard">
+
+                    <h4>
+
+                        <i class="fas fa-wind"></i>
+                        Air Quality Index
+
+                    </h4>
+
+                    <h2 id="aqiValue">
+
+                        --
+
+                    </h2>
+
+                </div>
+
+                <!-- FORECAST -->
+
+                <div
+                    class="glass-card p-4 d-none"
+                    id="forecastCard">
+
+                    <h4 class="mb-4">
+
+                        <i class="fas fa-calendar-alt"></i>
+                        5 Day Forecast
+
+                    </h4>
+
+                    <div
+                        id="forecastContainer"
+                        class="row">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+{% endblock %}

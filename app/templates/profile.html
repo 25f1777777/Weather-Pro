@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Profile | WeatherPro
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <!-- PROFILE HEADER -->
+
+        <div class="glass-card p-4 mb-4">
+          <div class="row align-items-center">
+            <div class="col-md-3 text-center">
+              <div class="profile-avatar">
+                <i class="fas fa-user-circle"></i>
+              </div>
+            </div>
+
+            <div class="col-md-9">
+              <h2 class="fw-bold">{{ current_user.username }}</h2>
+
+              <p class="mb-2">
+                <i class="fas fa-envelope"></i>
+
+                {{ current_user.email }}
+              </p>
+
+              <p class="mb-0">
+                <i class="fas fa-calendar-alt"></i>
+
+                Joined:
+                {{ current_user.created_at.strftime('%d %b %Y') }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATS -->
+
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <div class="glass-card p-4 text-center">
+              <i class="fas fa-star fa-2x mb-3 text-warning"></i>
+
+              <h2>{{ current_user.favorites|length }}</h2>
+
+              <p class="mb-0">Favorite Cities</p>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-4">
+            <div class="glass-card p-4 text-center">
+              <i class="fas fa-search fa-2x mb-3 text-info"></i>
+
+              <h2>{{ current_user.searches|length }}</h2>
+
+              <p class="mb-0">Total Searches</p>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-4">
+            <div class="glass-card p-4 text-center">
+              <i class="fas fa-cloud-sun fa-2x mb-3 text-success"></i>
+
+              <h2>Active</h2>
+
+              <p class="mb-0">Account Status</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAVORITES -->
+
+        <div class="glass-card p-4 mb-4">
+          <h4 class="mb-4">
+            <i class="fas fa-star"></i>
+
+            Favorite Cities
+          </h4>
+
+          {% if current_user.favorites %}
+            <div class="row">
+              {% for city in current_user.favorites %}
+                <div class="col-md-4 mb-3">
+                  <a href="{{ url_for('weather.dashboard', city=city.city_name) }}" class="text-decoration-none">
+                    <div class="favorite-card">
+                      <i class="fas fa-map-marker-alt"></i>
+
+                      {{ city.city_name }}
+                    </div>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-white">No favorite cities added yet.</p>
+          {% endif %}
+        </div>
+
+        <!-- RECENT SEARCHES -->
+
+        <div class="glass-card p-4">
+          <h4 class="mb-4">
+            <i class="fas fa-history"></i>
+
+            Recent Searches
+          </h4>
+
+          {% if recent_searches %}
+            <div class="row">
+              {% for search in recent_searches %}
+                <div class="col-md-6 mb-3">
+                  <a href="{{ url_for('weather.dashboard', city=search.city_name) }}" class="text-decoration-none">
+                    <div class="glass-card p-3 search-history-card">
+                      <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                          <h5 class="mb-2">
+                            <i class="fas fa-map-marker-alt text-danger"></i>
+
+                            {{ search.city_name }}
+                          </h5>
+
+                          <p class="mb-1">
+                            <i class="fas fa-temperature-high text-warning"></i>
+
+                            {% if search.temperature is not none %}
+                              {{ search.temperature|round(1) }}°C
+                            {% else %}
+                              --
+                            {% endif %}
+                          </p>
+
+                          <p class="mb-1">
+                            <i class="fas fa-cloud text-info"></i>
+
+                            {% if search.weather_condition %}
+                              {{ search.weather_condition }}
+                            {% else %}
+                              --
+                            {% endif %}
+                          </p>
+
+                          <small class="text-secondary">
+                            <i class="fas fa-clock"></i>
+
+                            {{ search.searched_at.strftime('%d %b %Y %H:%M') }}
+                          </small>
+                        </div>
+
+                        <div>
+                          <i class="fas fa-arrow-right fa-lg"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-muted">No searches yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

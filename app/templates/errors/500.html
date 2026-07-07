@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+500 | Server Error
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="glass-card text-center p-5">
+
+                <h1 class="display-1 fw-bold">
+
+                    500
+
+                </h1>
+
+                <h3 class="mb-3">
+
+                    Internal Server Error
+
+                </h3>
+
+                <p class="mb-4">
+
+                    Something went wrong on our side.
+
+                    Please try again later.
+
+                </p>
+
+                <a
+                    href="{{ url_for('weather.dashboard') }}"
+                    class="btn btn-primary">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Go Back
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
