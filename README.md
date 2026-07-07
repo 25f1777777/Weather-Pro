@@ -4,18 +4,7 @@ A modern, feature-rich weather dashboard built with **Flask**, **SQLAlchemy**, a
 
 ---
 
-## 📸 Screenshots
 
-> Add screenshots of your application here.
-
-- Dashboard
-- Login
-- Register
-- User Profile
-- Dark Theme
-- Light Theme
-
----
 
 ## ✨ Features
 
@@ -246,6 +235,7 @@ with a PostgreSQL database hosted on Neon.
 # 👨‍💻 Author
 
 **Chakradhar Yerrarbolu**
+**Tejaswini Suru** 
 
 GitHub:
 https://github.com/yourusername
