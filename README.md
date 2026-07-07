@@ -234,7 +234,7 @@ with a PostgreSQL database hosted on Neon.
 
 # 👨‍💻 Author
 
-**Chakradhar Yerrarbolu**
+**Chakradhar Yerrarbolu** , 
 **Tejaswini Suru** 
 
 GitHub:
